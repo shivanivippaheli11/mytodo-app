@@ -27,9 +27,9 @@
                 </div>
             </form>
             <div>
-                <%- include('todos.ejs',{subtitle:"Overdue",data:overdue,unq:"count-overdue"}) %> 
-                <%- include('todos.ejs',{subtitle:"Due Today",data:dueToday,unq:"count-due-today"}) %> 
-                <%- include('todos.ejs',{subtitle:"Due Later",data:dueLater,unq:"count-due-later"}) %> 
+                <%- include('todos.ejs',{name:"Overdue",data:overdue,unq:"count-overdue"}) %> 
+                <%- include('todos.ejs',{name:"Due Today",data:dueToday,unq:"count-due-today"}) %> 
+                <%- include('todos.ejs',{name:"Due Later",data:dueLater,unq:"count-due-later"}) %> 
             </div>
         </div>
     </div>
