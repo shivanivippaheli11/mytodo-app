@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-class-members */
 "use strict";
 const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
@@ -50,9 +51,29 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
+    static async completedItems() {
+      // FILL IN HERE TO RETURN OVERDUE ITEMS
+      return await Todo.findAll({
+        where: {
+          completed: true,
+        },
+      });
+    }
 
+    // eslint-disable-next-line no-dupe-class-members
+
+    static async remove(id) {
+      return this.destroy({
+        where: {
+          id,
+        },
+      });
+    }
     markAsCompleted() {
       return this.update({ completed: true });
+    }
+    setCompletionStatus(bol) {
+      return this.update({ completed: bol });
     }
   }
   Todo.init(

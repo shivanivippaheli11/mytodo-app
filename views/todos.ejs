@@ -4,11 +4,11 @@
     <% for (let i=0;i<data.length;i++){ %>
         <li class="Todo-item">
             <div class="flex items-center w-fix my-2 px-2 py-1 rounded hover:bg-gray-100">
-                <input id="<%=data[i].id%>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gay-100 rounded border ">
-                <label for="<%=data[i].id%>" class="ml-2 text-sm text-gray-600 cursor-pointer font-medium ">
+                <input id="todo-checkbox-<%= data[i].id%>" type="checkbox" <%= data[i].completed?"checked":"" %>   onclick="updateTodo(<%= data[i].id %>)"class="w-4 h-4 text-blue-600 bg-gay-100 rounded border ">
+                <label for="todo-checkbox-<%=data[i].id%>" class="ml-2 text-sm text-gray-600 cursor-pointer font-medium ">
                     <%=data[i].title%>
                 </label>
-                <a href="#" class="hidden trash-icon ml-2">
+                <a href="#" class="hidden trash-icon ml-2" onclick="deleteTodo(<%= data[i].id %>)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round"
