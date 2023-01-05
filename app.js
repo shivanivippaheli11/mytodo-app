@@ -11,6 +11,8 @@ app.use(cookieParser("hi hello"));
 app.use(csrf({ cookie: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+app.use(express.static(path.join(__dirname, "public")));
 app.get("/", async function (request, response) {
   const overdue = await Todo.overdue();
   const allTodos = await Todo.getTodos();

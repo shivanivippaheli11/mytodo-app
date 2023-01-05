@@ -15,6 +15,7 @@
         .getAttribute("content");
         function updateTodo(id){
             const completionStatus = document.getElementById(id).checked
+            console.log(completionStatus,"gggggggggggggggggggggggg");
             fetch(`/todos/${id}`,{
                 method:"put",
                 headers:{"Content-Type": "application/json"},
