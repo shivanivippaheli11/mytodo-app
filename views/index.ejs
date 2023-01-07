@@ -9,71 +9,16 @@
     <title>dues app</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css">
-    <script>
-        var token=document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-        function updateTodo(id){
-            const completionStatus = document.getElementById(id).checked
-            console.log(completionStatus,"gggggggggggggggggggggggg");
-            fetch(`/todos/${id}`,{
-                method:"put",
-                headers:{"Content-Type": "application/json"},
-                body:JSON.stringify({
-                    "_csrf":token,
-                    completed:completionStatus
-                })
-                }
-            )
-              .then((res)=>{
-                if(res.ok){
-                    window.location.reload();
-                }
-              })
-              .catch((err) => console.error(err));
-        }
-        function deleteTodo(id){
-            fetch(`/todos/${id}`,{
-                method:"delete",
-                headers:{"Content-Type": "application/json"},
-                body:JSON.stringify({
-                    "_csrf":token
-            })
-            })
-              .then((res)=>{
-                if(res.ok){
-                    window.location.reload();
-                }
-              })
-              .catch((err) => console.error(err));
-        }
-    </script>
+        
 </head>
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %> 
-            <form action="/todos" method="post">
-                <input type="hidden" name="_csrf" value="<%=csrfToken%>"> 
-                <div class="fles gap-2 py-4">
-                    <div class="flex-auto">
-                        <input type="text" name="title" placeholder="what's next?" class="border border-gray-400 rounded w-full p-1 text-sm " required />
-                    </div>
-                    <div class="flex py-4">
-                        <input type="date" name="dueDate" class="border border-gray-400 rounded w-full p-1 text-sm leading-2 " required />
-                    </div>
-                    <div class="flex-none">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-1 rounded font-medium mr-2 mb-2" >Add</button>
-                    </div>
-                </div>
-            </form>
-
-            <div>
-                <%- include('todos.ejs',{name:"Overdue",data:overdue,unq:"count-overdue"}) %> 
-                <%- include('todos.ejs',{name:"Due Today",data:dueToday,unq:"count-due-today"}) %> 
-                <%- include('todos.ejs',{name:"Due Later",data:dueLater,unq:"count-due-later"}) %> 
-                <%- include('todos.ejs',{name:"completedItems",data:completedItems,unq:"count-completed-items"}) %> 
-            </div>
+            <p class="py-2">Welcome to Todo manager</p>
+            <p class="py-2">New here?<a href="/Signup" class="text-green-500">Sign-up now</a></p>
+            <p class="py-2">Already have an account?<a href="/login" class="text-green-500">Sign-in</a></p>
+            
         </div>
     </div>
 

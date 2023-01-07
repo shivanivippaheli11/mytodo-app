@@ -10,19 +10,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
+      Todo.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
       // define association here
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({
+        title: title,
+        dueDate: dueDate,
+        completed: false,
+        userId,
+      });
     }
     static getTodos() {
       return Todo.findAll();
     }
-    static async overdue() {
+    static async overdue(userId) {
       // FILL IN HERE TO RETURN OVERDUE ITEMS
       return await Todo.findAll({
         where: {
+          userId,
           dueDate: {
             [Op.lt]: new Date().toLocaleDateString("en-CA"),
           },
@@ -31,10 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static async dueToday() {
+    static async dueToday(userId) {
       // FILL IN HERE TO RETURN ITEMS DUE tODAY
       return await Todo.findAll({
         where: {
+          userId,
           dueDate: {
             [Op.eq]: new Date().toLocaleDateString("en-CA"),
           },
@@ -43,10 +53,11 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static async dueLater() {
+    static async dueLater(userId) {
       // FILL IN HERE TO RETURN ITEMS DUE LATER
       return await Todo.findAll({
         where: {
+          userId,
           dueDate: {
             [Op.gt]: new Date().toLocaleDateString("en-CA"),
           },
@@ -54,10 +65,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
-    static async completedItems() {
+    static async completedItems(userId) {
       // FILL IN HERE TO RETURN OVERDUE ITEMS
       return await Todo.findAll({
         where: {
+          userId,
           completed: true,
         },
       });
@@ -81,7 +93,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   Todo.init(
     {
-      title: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+          len: {
+            args: 5,
+            msg: "Give a more descriptive title for Todo",
+          },
+        },
+      },
       dueDate: DataTypes.DATEONLY,
       completed: DataTypes.BOOLEAN,
     },
