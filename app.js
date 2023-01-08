@@ -45,16 +45,17 @@ passport.use(
     },
     (username, password, done) => {
       User.findOne({ where: { email: username } })
-        .then(async (user) => {
+        .then(async function (user) {
           const result = await bcrypt.compare(password, user.password);
           if (result) {
             return done(null, user);
           } else {
-            return done(null, false, { message: "Invalid Password" });
+            return done(null, false, { message: "Invalid password" });
           }
         })
         .catch((error) => {
-          return done(error);
+          console.log(error);
+          return done(null, false, { message: "Invalid email" });
         });
     }
   )
@@ -74,13 +75,14 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get("/", (request, response) => {
-  if (request.user) {
+  if (request.user != undefined) {
     response.redirect("/todos");
+  } else {
+    response.render("index", {
+      title: "Todo Application",
+      csrfToken: request.csrfToken(),
+    });
   }
-  response.render("index", {
-    title: "Todo Application",
-    csrfToken: request.csrfToken(),
-  });
 });
 
 app.get(
@@ -122,6 +124,22 @@ app.get("/signup", (request, response) => {
   });
 });
 app.post("/users", async (request, response) => {
+  if (!request.body.firstName) {
+    request.flash("error", "Please enter your first name");
+    return response.redirect("/signup");
+  }
+  if (!request.body.email) {
+    request.flash("error", "Please enter email ID");
+    return response.redirect("/signup");
+  }
+  if (!request.body.password) {
+    request.flash("error", "Please enter your password");
+    return response.redirect("/signup");
+  }
+  if (request.body.password < 8) {
+    request.flash("error", "Password length should be atleast 8");
+    return response.redirect("/signup");
+  }
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
   console.log(hashedPwd);
   try {
@@ -138,7 +156,8 @@ app.post("/users", async (request, response) => {
       response.redirect("/todos");
     });
   } catch (error) {
-    console.log(error);
+    request.flash("error", "email already exists");
+    response.redirect("/signup");
   }
 });
 
