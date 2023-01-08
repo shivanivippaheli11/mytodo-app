@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-var csrf = require("csurf");
+var csrf = require("tiny-csrf");
 const { Todo, User } = require("./models");
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
@@ -16,10 +16,10 @@ const saltRounds = 10;
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("hi hello"));
-app.use(csrf({ cookie: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(flash());
+app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
